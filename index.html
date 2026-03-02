@@ -230,14 +230,12 @@
 
             fetch("https://script.google.com/macros/s/AKfycbxCkNibXkkikSX7lh9FjUcSTZSsqYaXUPwVldy2rpC2FZAesD1Sj_V4vpanx-OMA8MaUA/exec", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 body: JSON.stringify({
                     reasons: reasons.join(", "),
                     details: details
                 })
             })
+                .then(response => response.json())
                 .then(() => {
                     form.style.display = "none";
                     success.style.display = "block";
@@ -249,4 +247,5 @@
         });
     </script>
 </body>
+
 </html>
