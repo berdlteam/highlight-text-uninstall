@@ -212,37 +212,22 @@
 
     </div>
 
-    <script>
+    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+    <script type="text/javascript">
         const form = document.getElementById("feedbackForm");
-        const success = document.getElementById("successMessage");
 
         form.addEventListener("submit", function (e) {
-            e.preventDefault();
+            e.preventDefault(); // отменяем стандартную отправку формы
 
-            const formData = new FormData(form);
-            const reasons = formData.getAll("reason");
-            const details = formData.get("details");
-
-            if (reasons.length === 0) {
-                alert("Please select at least one reason.");
-                return;
-            }
-
-            fetch("https://script.google.com/macros/s/AKfycbxCkNibXkkikSX7lh9FjUcSTZSsqYaXUPwVldy2rpC2FZAesD1Sj_V4vpanx-OMA8MaUA/exec", {
-                method: "POST",
-                body: JSON.stringify({
-                    reasons: reasons.join(", "),
-                    details: details
-                })
-            })
-                .then(response => response.json())
+            // Отправка формы через EmailJS
+            emailjs.sendForm('service_x5ebvtl', 'feedback_template', this)
                 .then(() => {
-                    form.style.display = "none";
-                    success.style.display = "block";
-                })
-                .catch((err) => {
+                    // Скрываем форму и показываем сообщение об успехе
+                    document.getElementById("feedbackForm").style.display = "none";
+                    document.getElementById("successMessage").style.display = "block";
+                }, (err) => {
+                    alert("Failed to send feedback. Please try again.");
                     console.error(err);
-                    alert("Failed to send feedback");
                 });
         });
     </script>
