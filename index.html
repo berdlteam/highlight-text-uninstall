@@ -142,106 +142,80 @@
             margin-bottom: 10px;
         }
     </style>
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init("9ViJsjsaN3hGQcpwV");
+        })();
+    </script>
 </head>
 
 <body>
 
     <div class="container">
-
         <form id="feedbackForm">
-
             <progress max="2" value="1"></progress>
-
             <h1>We are sad to see you go 🥺</h1>
             <div class="subtitle">
                 Help us understand how we can make Highlight Text better for you and others.
             </div>
 
-            <div class="section-title">
-                1. Why are you deleting the extension? *
-            </div>
-
+            <div class="section-title">1. Why are you deleting the extension? *</div>
             <div class="checkbox-group">
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="buggy">
-                    🪲 The extension was buggy
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="did_not_use">
-                    😶 I did not use it much
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="missing_features">
-                    ⛓️ Some features were missing
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="other_tool">
-                    🙏 I prefer another tool
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="just_testing">
-                    👀 I was just testing it
-                </label>
-
-                <label class="checkbox-item">
-                    <input type="checkbox" name="reason" value="other">
-                    Other
-                </label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="buggy">🪲 The extension was
+                    buggy</label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="did_not_use">😶 I did not use
+                    it much</label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="missing_features">⛓️ Some
+                    features were missing</label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="other_tool">🙏 I prefer another
+                    tool</label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="just_testing">👀 I was just
+                    testing it</label>
+                <label class="checkbox-item"><input type="checkbox" name="reason" value="other">Other</label>
             </div>
 
-            <div class="section-title">
-                2. Could you share more details? (Optional)
-            </div>
-
+            <div class="section-title">2. Could you share more details? (Optional)</div>
             <textarea name="details" placeholder="Tell us what went wrong, what could be better..."></textarea>
 
-            <!-- скрытое поле для объединенных чекбоксов -->
+            <!-- Скрытое поле для объединенных чекбоксов -->
             <input type="hidden" name="reason_combined">
 
-            <button type="submit">
-                Send Feedback →
-            </button>
-
+            <button type="submit">Send Feedback →</button>
         </form>
 
         <div class="success" id="successMessage">
             <h2>Thank you for your feedback ❤️</h2>
             <p>We appreciate your time and will use this to improve.</p>
         </div>
-
     </div>
 
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
-
     <script type="text/javascript">
-        const form = document.getElementById("feedbackForm");
+        window.onload = function () {
+            document.getElementById('feedbackForm').addEventListener('submit', function (event) {
+                event.preventDefault();
 
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
+                // Объединяем выбранные причины
+                const checkedReasons = Array.from(document.querySelectorAll('input[name="reason"]:checked'))
+                    .map(cb => cb.value)
+                    .join(', ');
+                this.querySelector('input[name="reason_combined"]').value = checkedReasons;
 
-            // объединяем выбранные причины
-            const checkedReasons = Array.from(document.querySelectorAll('input[name="reason"]:checked'))
-                .map(cb => cb.value)
-                .join(', ');
-
-            form.querySelector('input[name="reason_combined"]').value = checkedReasons;
-
-            // отправка через EmailJS
-            emailjs.sendForm('service_x5ebvtl', 'feedback_template', this)
-                .then(() => {
-                    form.style.display = "none";
-                    document.getElementById("successMessage").style.display = "block";
-                }, (err) => {
-                    alert("Failed to send feedback. Please try again.");
-                    console.error(err);
-                });
-        });
+                // Отправка формы через EmailJS
+                emailjs.sendForm('service_x5ebvtl', 'template_h6lypgj', this)
+                    .then(() => {
+                        this.style.display = "none";
+                        document.getElementById("successMessage").style.display = "block";
+                    }, (error) => {
+                        console.error('FAILED...', error);
+                        alert("Failed to send feedback. Please try again.");
+                    });
+            });
+        };
     </script>
+
 </body>
 
 </html>
