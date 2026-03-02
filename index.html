@@ -231,13 +231,33 @@
             document.getElementById('feedbackForm').addEventListener('submit', function (event) {
                 event.preventDefault();
 
-                // Объединяем выбранные причины
                 const checkedReasons = Array.from(document.querySelectorAll('input[name="reason"]:checked'))
                     .map(cb => cb.value)
                     .join(', ');
                 this.querySelector('input[name="reason_combined"]').value = checkedReasons;
 
-                // Отправка формы через EmailJS
+                const nameInput = document.querySelector('input[name="user_name"]');
+                const emailInput = document.querySelector('input[name="user_email"]');
+
+                const name = nameInput ? nameInput.value.trim() : '';
+                const email = emailInput ? emailInput.value.trim() : '';
+
+                let userInfo = '';
+                if (name || email) {
+                    const parts = [];
+                    if (name) parts.push(name);
+                    if (email) parts.push(email);
+                    userInfo = ` (${parts.join(' | ')})`;
+                }
+
+                let hiddenMessageInput = this.querySelector('input[name="custom_message"]');
+                if (!hiddenMessageInput) {
+                    hiddenMessageInput = document.createElement('input');
+                    hiddenMessageInput.type = 'hidden';
+                    hiddenMessageInput.name = 'custom_message';
+                    this.appendChild(hiddenMessageInput);
+                }
+                hiddenMessageInput.value = `User${userInfo} has uninstalled your Chrome extension.`;
                 emailjs.sendForm('service_x5ebvtl', 'template_h6lypgj', this)
                     .then(() => {
                         this.style.display = "none";
