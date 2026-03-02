@@ -217,21 +217,21 @@
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+
     <script type="text/javascript">
         const form = document.getElementById("feedbackForm");
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
-            // объединяем все выбранные причины
+            // объединяем выбранные причины
             const checkedReasons = Array.from(document.querySelectorAll('input[name="reason"]:checked'))
                 .map(cb => cb.value)
                 .join(', ');
 
-            // ставим в скрытое поле
             form.querySelector('input[name="reason_combined"]').value = checkedReasons;
 
-            // отправка формы через EmailJS
+            // отправка через EmailJS
             emailjs.sendForm('service_x5ebvtl', 'feedback_template', this)
                 .then(() => {
                     form.style.display = "none";
@@ -242,7 +242,6 @@
                 });
         });
     </script>
-
 </body>
 
 </html>
