@@ -257,7 +257,7 @@
                     hiddenMessageInput.name = 'custom_message';
                     this.appendChild(hiddenMessageInput);
                 }
-                hiddenMessageInput.value = `User${userInfo} has uninstalled your Chrome extension.`;
+                hiddenMessageInput.value = `User${userInfo} has uninstalled your Highlight Text extension.`;
                 emailjs.sendForm('service_dms8mav', 'service_dms8mav', this)
                     .then(() => {
                         this.style.display = "none";
